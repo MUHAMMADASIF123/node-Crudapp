@@ -10,21 +10,37 @@ function writeDataToFile(filename, content) {
   });
 }
 
-function getPostData(req){
-    return new Promise ((resolve,rejects)=> {
-        try{
-            let body = ''
-            req.on('data',(chunk)=> {
-               body += chunk.toString()
-            })
-            req.on('end',()=> {
-                resolve(body)
-            })
-        }
-        catch(error){
-            console.log(error)
-        }
-    })
+// function getPostData(req){
+//     return new Promise ((resolve,rejects)=> {
+//         try{
+//             let body = ''
+//             req.on('data',(chunk)=> {
+//                body += chunk.toString()
+//             })
+//             req.on('end',()=> {
+//                 resolve(body)
+//             })
+//         }
+//         catch(error){
+//             console.log(error)
+//         }
+//     })
+// }
+function getPostData(req) {
+  return new Promise((resolve, reject) => { // Corrected 'rejects' to 'reject'
+      try {
+          let body = '';
+          req.on('data', (chunk) => {
+              body += chunk.toString();
+          });
+          req.on('end', () => {
+              resolve(body);
+          });
+      } catch (error) {
+          console.log(error);
+          reject(error); // Properly reject the promise on error
+      }
+  });
 }
 module.exports = {
   writeDataToFile,

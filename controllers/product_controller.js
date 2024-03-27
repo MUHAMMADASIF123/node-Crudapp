@@ -15,7 +15,9 @@ async function getProducts(req, res) {
 
 //@desc gets single product
 //@Route GET /api/product/id
-async function getProduct(req, res, id) {
+async function getProduct(req, res,) {
+  const id = req.params.id;
+  console.log(id,"id")
   try {
     const product = await Products.findById(id);
     if (!product) {
@@ -30,8 +32,11 @@ async function getProduct(req, res, id) {
 
 async function createProduct(req, res) {
   try {
-    const body = await getPostData(req);
-    const { name, description, price } = JSON.parse(body);
+
+    const body = req.body;
+    // await getPostData(req);
+    // const parsedBody = JSON.parse(body); // Make sure to parse the JSON string to an object
+    const { name, description, price } = body;
 
     const product = {
       name,
@@ -50,13 +55,14 @@ async function createProduct(req, res) {
 //Rout PUT /api/product/:id
 async function updateProduct(req, res) {
   const id = req.params.id;
+  // console
   try {
     const product = await Products.findById(id);
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
-    const body = await getPostData(req);
-    const { name, description, price } = JSON.parse(body);
+    // const body = await getPostData(req);
+    const { name, description, price } = req.body;
     const productData = {
       name: name || product.name,
       description: description || product.description,
