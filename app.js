@@ -1,56 +1,19 @@
-const http = require("http");
-const url = require("url");
-const fs = require("fs");
-const cors = require("cors");
-const path = require("path");
-const {
-  getProducts,
-  getProduct,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-  helloWorld
-} = require("./controllers/product_contorler");
-const server = http.createServer((req, res, id) => {
-  cors()(req, res, () => {
-    if (req.url === "/api/product/" && req.method === "GET") {
-      getProducts(req, res);
-    } else if (
-      req.url.match(/\/api\/product\/[a-zA-Z0-9-]+$/) &&
-      req.method === "GET"
-    ) {
-      const id = req.url.split("/")[3];
-      getProduct(req, res, id);
-    } else if (req.url === "/api/product/" && req.method === "POST") {
-      const id = req.url.split("/")[3];
-      createProduct(req, res, id);
-    } else if (
-      req.url.match(/\/api\/product\/([0-9]+)/) &&
-      req.method === "PUT"
-    ) {
-      const id = req.url.split("/")[3];
-      updateProduct(req, res, id);
-    } else if (
-      req.url.match(/\/api\/product\/[a-zA-Z0-9-]+$/) &&
-      req.method === "DELETE"
-    ) {
-      const id = req.url.split("/")[3];
-      deleteProduct(req, res, id);
-    }else if (
-      (req.url === "/" && req.method === "GET")
-    ) {
-      helloWorld(req, res)
-    } else {
-      res.setHeader("Access-Control-Allow-Origin", "*");
-      res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-      res.setHeader(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept"
-      );
-      res.writeHead(404, { "Content-type": "application/json" });
-      res.end(JSON.stringify({ message: "not found" }));
-    }
-  });
+const express = require('express');
+const cors = require('cors');
+const productRoutes = require('./routes/product_routes');
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+app.use('', productRoutes);
+
+app.get('/', (req, res) => {
+  res.json({ message: 'Hello World!' });
 });
+
 const PORT = process.env.PORT || 2000;
-server.listen(PORT, () => console.log(`Server running at ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running at ${PORT}`);
+});
