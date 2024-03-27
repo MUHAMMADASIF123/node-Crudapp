@@ -11,6 +11,15 @@ async function getProducts(req, res) {
     console.log(error);
   }
 }
+async function helloWorld(req, res) {
+  try {
+    const products = await Products.find();
+    res.writeHead(200, { "Content-type": "application/json" });
+    res.end(JSON.stringify(products));
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 //@desc gets single product
 //@Route GET /api/product/id
@@ -103,4 +112,5 @@ module.exports = {
   createProduct,
   updateProduct,
   deleteProduct,
+  helloWorld
 }

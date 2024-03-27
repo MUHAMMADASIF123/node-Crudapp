@@ -9,6 +9,7 @@ const {
   createProduct,
   updateProduct,
   deleteProduct,
+  helloWorld
 } = require("./controllers/product_contorler");
 const server = http.createServer((req, res, id) => {
   cors()(req, res, () => {
@@ -35,6 +36,10 @@ const server = http.createServer((req, res, id) => {
     ) {
       const id = req.url.split("/")[3];
       deleteProduct(req, res, id);
+    }else if (
+      (req.url === "/" && req.method === "GET")
+    ) {
+      helloWorld(req, res)
     } else {
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
